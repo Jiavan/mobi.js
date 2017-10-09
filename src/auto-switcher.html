@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mobi.js</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            color: white;
+        }
+
+        ul, li {
+            list-style-type: none;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        .navbar {
+            height: 46px;
+            font-size: 0;
+            white-space: nowrap;
+            background: teal;
+            overflow-x: scroll;
+        }
+
+        .navbar__item {
+            width: 28.57%;
+            height: 100%;
+            font: 20px/45px a;
+        }
+
+        .navbar__item + .navbar__item {
+            border-left: 1px solid navajowhite;
+        }
+
+        .navbar__item_active {
+            background: burlywood;
+        }
+
+        .card {
+            height: 400px;
+            font: 50px/1.2 a;
+            text-align: center;
+        }
+
+        .card:nth-of-type(1) {
+            background: aquamarine;
+        }
+
+        .card:nth-of-type(2) {
+            background: blueviolet;
+        }
+        
+        .card:nth-of-type(3) {
+            background: cadetblue;
+        }
+
+        .card:nth-of-type(4) {
+            background: darkmagenta;
+        }
+
+        .card:nth-of-type(5) {
+            background: firebrick;
+        }
+
+        .card:nth-of-type(6) {
+            background: grey;
+        }
+    </style>
+</head>
+<body>
+    <section class="card"></section>
+    <ul class="navbar">
+        <li class="navbar__item navbar__item_active">A</li>
+        <li class="navbar__item">B</li>
+        <li class="navbar__item">C</li>
+        <li class="navbar__item">D</li>
+        <li class="navbar__item">E</li>
+        <li class="navbar__item">F</li>
+    </ul>
+    <ul>
+        <section class="card">A</section>
+        <section class="card">B</section>
+        <section class="card">C</section>
+        <section class="card">D</section>
+        <section class="card">E</section>
+        <section class="card">F</section>
+    </ul>
+    <script>
+    
+    </script>
+</body>
+</html>
