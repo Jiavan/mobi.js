@@ -32,7 +32,7 @@
             font-size: 0;
             white-space: nowrap;
             background: teal;
-            overflow-x: scroll;
+            overflow-x: auto;
         }
 
         .navbar__item {
@@ -49,7 +49,8 @@
             background: burlywood;
         }
 
-        .card {
+        .card,
+        .head {
             height: 400px;
             font: 50px/1.2 a;
             text-align: center;
@@ -78,10 +79,17 @@
         .card:nth-of-type(6) {
             background: grey;
         }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <section class="card"></section>
+    <section class="head"></section>
     <ul class="navbar">
         <li class="navbar__item navbar__item_active">A</li>
         <li class="navbar__item">B</li>
@@ -99,7 +107,93 @@
         <section class="card">F</section>
     </ul>
     <script>
-    
+        var navbar,
+            navbarHeight,
+            offsetTop,
+            scrollTop,
+            tabs,
+            activeClassName,
+            timer,
+            threshold = 0,
+            sections,
+            sectionsPosition = [];
+
+        activeClassName = 'navbar__item_active';
+        tabs = document.querySelectorAll('.navbar__item');
+        tabs.length && (tabs = [].slice.call(tabs));
+
+        function ceiling(selector) {
+            navbar = document.querySelector(selector);
+            
+            if (!(navbar instanceof HTMLElement)) {
+                return;
+            }
+            offsetTop = navbar.offsetTop;
+            navbarHeight = navbar.clientHeight;
+
+            window.addEventListener('scroll', function() {
+                scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+                
+                if (scrollTop > offsetTop) {
+                    navbar.classList.add('fixed');
+                    navbar.nextElementSibling && (navbar.nextElementSibling.style.paddingTop = navbarHeight + 'px');
+                } else {
+                    if (navbar.className.indexOf('fixed')) {
+                        navbar.classList.remove('fixed');
+                        navbar.nextElementSibling.style.paddingTop = '0px';
+                    }
+                }
+            }, false);
+
+            tabs.forEach(function(tab, index) {
+                tab.dataset.autoSwitcherId = index;
+                tab.addEventListener('click', function() {
+                    switchSection(tab.dataset.autoSwitcherId, activateTab(tab.dataset.autoSwitcherId));
+                }, false);
+            });
+        }
+
+        function autoSwitch(selector) {
+            sections = document.querySelectorAll('.card');
+            sections = [].slice.call(sections);
+            sections.forEach(function(section) {
+                sectionsPosition.push(section.offsetTop);
+            });
+
+            window.addEventListener('scroll', function(e){
+                clearTimeout(timer);
+                timer = setTimeout(function() {
+                    activateTab(getTabIndex());
+                }, 20);
+            }, false);
+        }
+
+        function activateTab(index) {
+            tabs.forEach(function(tab, i) {
+                index === i ? tab.classList.add(activeClassName) : tab.classList.remove(activeClassName);
+            });
+        }
+
+        function getTabIndex() {
+            if (sectionsPosition.length) {
+                for (var i = 0; i < sectionsPosition.length; i++) {
+                    if (scrollTop < (sectionsPosition[i] - navbarHeight - threshold)) {
+                        return i > 0 ? (i - 1) : 0;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        function switchSection(index, callback) {
+            window.scrollTo(0, sectionsPosition[index] - navbarHeight);
+            callback && callback();
+        }
+
+        ceiling('.navbar');
+        autoSwitch();
+        // TODO: 横向绝对定位，使用动画 https://pro.m.jd.com/mall/active/2bom9gkbkscfnggcWwGVs8uPPKwN/index.html
     </script>
 </body>
 </html>
